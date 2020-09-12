@@ -31,7 +31,7 @@
       }
 
       .set-animate-4 {
-        transition: all 0.37s;
+        transition: all 0.27s;
       }
 
       .default-circle {
@@ -48,6 +48,11 @@
         left: 50%;
         /* bring your own prefixes */
         transform: translate(-50%, -50%);
+      }
+
+      #phoneme {
+        font-family: "Georgia", "roboto", monospace, "微軟正黑體";
+        font-size: 18em;
       }
     </style>
   </head>
@@ -93,7 +98,7 @@
 
       
       let database, frequency, freqArray;
-      const radius = 150;
+      const radius = 250;
       const phonemeFrequencies = {
         "C": {
           frequency: 262,
@@ -185,6 +190,10 @@
             let phoneme = value.val()[Object.keys(value.val())[0]];
             volume = (Math.floor(Math.random() * 20) + 1) / 100 + 0.8
             music.createSound(phonemeFrequencies[phoneme].frequency);
+            if (document.getElementById("phoneme") != null) {
+              document.getElementById("phoneme").remove();
+            }
+            displayPhonemeName(phoneme);
             frequency = phonemeFrequencies[phoneme].index;
             document.getElementById("cvs").classList.add("set-animate");
             // document.getElementById("cvs").style.transitionTimingFunction = "cubic-bezier(.99, .01, .88, .45)";
@@ -209,8 +218,8 @@
         let cvs = document.getElementById("cvs");
         let ctx = cvs.getContext("2d");
 
-        ctx.canvas.width = window.innerWidth;
-        ctx.canvas.height = window.innerHeight;
+        cvs.width = window.innerWidth;
+        cvs.height = window.innerHeight;
 
         let centerX = cvs.width / 2;
         let centerY = cvs.height / 2;
@@ -248,7 +257,7 @@
         color = colorsValue[Math.floor(Math.random() * 7)];
           
         for(let i = 0; i < bars; ++i) {
-          let barHeight = freqArray[i];
+          let barHeight = freqArray[i] * 3;
 
           let startX = centerX + radius * Math.cos(theta * i);
           let startY = centerY + radius * Math.sin(theta * i);
@@ -270,12 +279,11 @@
           document.getElementById(element.id).style.display = "block";
           document.getElementById(element.id).classList.add("set-animate-4");
           setTimeout(() => {
-            document.getElementById(element.id).style.height = "290px";
-            document.getElementById(element.id).style.width = "290px";
+            document.getElementById(element.id).style.height = "490px";
+            document.getElementById(element.id).style.width = "490px";
             setTimeout(() => {
-              console.log(element.id);
               document.getElementById(element.id).remove();
-            }, 370)
+            }, 270)
           }, 20)
           
         }, 10);
@@ -323,7 +331,7 @@
         })
           
         for(let i = 0; i < bars; ++i) {
-          let barHeight = freqArray[i];
+          let barHeight = freqArray[i] * 3;
 
           let startX = centerX + radius * Math.cos(theta * i);
           let startY = centerY + radius * Math.sin(theta * i);
@@ -337,7 +345,7 @@
 
 
       function drawBar(startX, startY, endX, endY, freq, canvasContext){
-        const barWidth = 8;
+        const barWidth = 12;
 
         canvasContext.strokeStyle = color;
         canvasContext.lineWidth = barWidth;
@@ -358,6 +366,14 @@
         ctx.stroke();
 
         ctx.shadowBlur = 0;
+      }
+
+      function displayPhonemeName(phonemeName) {
+        let element = document.createElement("div");
+        element.id = "phoneme";
+        element.classList.add("centered");
+        element.innerHTML = phonemeName;
+        document.body.appendChild(element);
       }
     </script>
   </body>
