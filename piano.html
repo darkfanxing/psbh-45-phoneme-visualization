@@ -140,23 +140,25 @@
     const blackKeys = document.querySelectorAll('.key.black')
 
     keys.forEach(key => {
-      key.addEventListener('click', () => {
-        let phoneme = document.querySelectorAll(`div[data-note="${key.getAttribute("data-note")}"]`)[0];
-        database.ref("/").push(key.getAttribute("data-note"));
-        phoneme.classList.add("bg-gray");
-        setTimeout(() => {
-          phoneme.classList.remove("bg-gray");
-        }, 150)
-      })
-
-      key.addEventListener('touchstart', () => {
-        let phoneme = document.querySelectorAll(`div[data-note="${key.getAttribute("data-note")}"]`)[0];
-        database.ref("/").push(key.getAttribute("data-note"));
-        phoneme.classList.add("bg-gray");
-        setTimeout(() => {
-          phoneme.classList.remove("bg-gray");
-        }, 150)
-      })
+      if (isMobile()) {
+        key.addEventListener('touchstart', () => {
+          let phoneme = document.querySelectorAll(`div[data-note="${key.getAttribute("data-note")}"]`)[0];
+          database.ref("/").push(key.getAttribute("data-note"));
+          phoneme.classList.add("bg-gray");
+          setTimeout(() => {
+            phoneme.classList.remove("bg-gray");
+          }, 150)
+        }) 
+      } else {
+        key.addEventListener('click', () => {
+          let phoneme = document.querySelectorAll(`div[data-note="${key.getAttribute("data-note")}"]`)[0];
+          database.ref("/").push(key.getAttribute("data-note"));
+          phoneme.classList.add("bg-gray");
+          setTimeout(() => {
+            phoneme.classList.remove("bg-gray");
+          }, 150)
+        })
+      }
     })
   </script>
 </body>
