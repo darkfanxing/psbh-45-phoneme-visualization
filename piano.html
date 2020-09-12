@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Piano</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #143F6B;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .piano {
+      display: flex;
+    }
+
+    .key {
+      height: calc(var(--width) * 4);
+      width: var(--width);
+    }
+
+    .white {
+      --width: 50px;
+      background-color: white;
+      border: 1px solid #333;
+    }
+
+    .white.active {
+      background-color: #CCC;
+    }
+
+    .black {
+      --width: 30px;
+      background-color: black;
+      margin-left: calc(var(--width) / -2);
+      margin-right: calc(var(--width) / -2);
+      z-index: 2;
+      color: white;
+    }
+
+    .black.active {
+      background-color: #333;
+    }
+
+    .animation {
+      transition: all 0.15s;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      padding-bottom: 10px;
+    }
+
+    .bg-gray {
+      background-color: gray;
+    }
+  </style>
+</head>
+<body>
+  <div class="piano">
+    <div data-note="C" class="key white animation"">
+      <div>C</div>
+    </div>
+    <div data-note="Db" class="key black animation">
+      <div>Db</div>
+    </div>
+    <div data-note="D" class="key white animation">
+      <div>D</div>
+    </div>
+    <div data-note="Eb" class="key black animation">
+      <div>Eb</div>
+    </div>
+    <div data-note="E" class="key white animation">
+      <div>E</div>
+    </div>
+    <div data-note="F" class="key white animation">
+      <div>F</div>
+    </div>
+    <div data-note="Gb" class="key black animation">
+      <div>Gb</div>
+    </div>
+    <div data-note="G" class="key white animation">
+      <div>G</div>
+    </div>
+    <div data-note="Ab" class="key black animation">
+      <div>Ab</div>
+    </div>
+    <div data-note="A" class="key white animation">
+      <div>A</div>
+    </div>
+    <div data-note="Bb" class="key black animation">
+      <div>Bb</div>
+    </div>
+    <div data-note="B" class="key white animation">
+      <div>B</div>
+    </div>
+  </div>
+  
+  <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-database.js"></script>
+  <script>
+    function isMobile() {
+      try { document.createEvent("TouchEvent"); return true; }
+      catch(e) { return false; }
+    }
+    
+    if (isMobile()) {
+      document.getElementsByTagName("html")[0].style.transform = "rotate(90deg)";
+      let temp = document.getElementsByTagName("body")[0].style.width;
+      document.getElementsByTagName("body")[0].style.width = document.getElementsByTagName("body")[0].style.height;
+      document.getElementsByTagName("body")[0].style.height = temp;
+    }
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCHnHJKWv-eA-dr4rR4q_mj5rFq0ACn_U8",
+      databaseURL: "https://psbh45-6ca43.firebaseio.com",
+      projectId: "psbh45-6ca43",
+      storageBucket: "psbh45-6ca43.appspot.com",
+      messagingSenderId: "1050270713312",
+      appId: "1:1050270713312:web:a84906a08269f15210d785",
+      measurementId: "G-FM1CVEXZGP"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    let database = firebase.database();
+    database.ref("/").remove();
+
+    const keys = document.querySelectorAll('.key')
+    const whiteKeys = document.querySelectorAll('.key.white')
+    const blackKeys = document.querySelectorAll('.key.black')
+
+    keys.forEach(key => {
+      key.addEventListener('click', () => {
+        let phoneme = document.querySelectorAll(`div[data-note="${key.getAttribute("data-note")}"]`)[0];
+        database.ref("/").push(key.getAttribute("data-note"));
+        phoneme.classList.add("bg-gray");
+        setTimeout(() => {
+          phoneme.classList.remove("bg-gray");
+        }, 150)
+      })
+    })
+  </script>
+</body>
+</html>
